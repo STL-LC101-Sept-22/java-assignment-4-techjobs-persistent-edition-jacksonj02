@@ -2,7 +2,9 @@ package org.launchcode.techjobs.persistent.controllers;
 
 import org.launchcode.techjobs.persistent.models.Job;
 import org.launchcode.techjobs.persistent.models.JobData;
+import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
 import org.launchcode.techjobs.persistent.models.data.JobRepository;
+import org.launchcode.techjobs.persistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +22,14 @@ public class SearchController {
 
     @Autowired
     private JobRepository jobRepository;
+@Autowired
+private EmployerRepository employerRepository;
 
+@Autowired
+private SkillRepository skillRepository;
     @RequestMapping("")
     public String search(Model model) {
-        model.addAttribute("columns", columnChoices);
+        model.addAttribute("columns", ListController.columnChoices);
         return "search";
     }
 
@@ -35,8 +41,8 @@ public class SearchController {
         } else {
             jobs = JobData.findByColumnAndValue(searchType, searchTerm, jobRepository.findAll());
         }
-        model.addAttribute("columns", columnChoices);
-        model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": " + searchTerm);
+        model.addAttribute("columns", ListController.columnChoices);
+        model.addAttribute("title", "Jobs with " + ListController.columnChoices.get(searchType) + ": " + searchTerm);
         model.addAttribute("jobs", jobs);
 
         return "search";
